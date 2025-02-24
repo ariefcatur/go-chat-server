@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Register</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: #f4f4f4;
+        }
+        .container {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+            width: 300px;
+        }
+        input {
+            width: 100%;
+            padding: 10px;
+            margin: 5px 0;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+        button {
+            width: 100%;
+            padding: 10px;
+            background-color: #28a745;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #218838;
+        }
+        .message {
+            margin-top: 10px;
+            font-size: 14px;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <h2>Register</h2>
+    <input type="text" id="username" placeholder="Username" required>
+    <input type="password" id="password" placeholder="Password" required>
+    <button onclick="register()">Daftar</button>
+    <div class="message" id="message"></div>
+</div>
+
+<script>
+    function register() {
+        const username = document.getElementById("username").value;
+        const password = document.getElementById("password").value;
+        const messageDiv = document.getElementById("message");
+
+        fetch("http://localhost:8080/api/register", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({ username, password })
+        })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    messageDiv.style.color = "green";
+                    messageDiv.innerText = "Registrasi berhasil! Silakan login.";
+                } else {
+                    messageDiv.style.color = "red";
+                    messageDiv.innerText = "Error: " + data.message;
+                }
+            })
+            .catch(error => {
+                messageDiv.style.color = "red";
+                messageDiv.innerText = "Terjadi kesalahan. Coba lagi.";
+            });
+    }
+</script>
+</body>
+</html>
